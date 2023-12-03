@@ -1,0 +1,50 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+{% if user.is_authenticated %}
+
+<div>
+    <h2>
+        Product name : {{ productname.capitalize }}
+
+    </h2>
+</div>
+<div>
+    Product Image : <img src="{{ image }}" alt="Product Image">
+</div>
+
+<div>
+    Vendor : <strong>{{ username }}</strong>
+</div>
+<div>
+    Current bid : {{price}} CHF
+</div>
+<div>
+    <form method="POST" action="{%url 'product_name' product_name=productname %}">
+    
+        {% csrf_token %}
+        
+        <input type="number" name="newbid" placeholder="{{price}} CHF">
+        
+        <input type="submit"   value="Bid" >
+        <div style="background-color: red;">{{message}}</div>
+    </form>
+</div>
+    {% if user.username == username%}
+<input type="submit" value="Close auction">
+    {% endif %}
+
+{% else %}
+    Please sign in or login.
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

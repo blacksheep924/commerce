@@ -1,0 +1,38 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block body %}
+{% if user.is_authenticated %}
+    <h2>Active Listings</h2>
+    <div>
+        
+    </div>
+
+    <ul>
+        {%for product in products%}
+        <li>
+            <h3><a href="{% url 'product_name' product.productName|urlize %}">{{product.productName.capitalize}} </a></h3>
+            <div>
+                <img src="{{product.productImage}}" alt="image of the product">
+            </div>
+            <div>
+                
+            </div>
+            <div>
+                
+         Price {{prices}}  CHF   
+         <div>
+            Owner : <strong>{{ product.productOwner}}</strong>
+        </div>
+            </div>
+            <div>
+                Description : {{product.comments.all.0.commentcontent}}
+            </div>
+            
+        </li>
+        {% endfor%}
+    </ul>
+    {% else %}
+    Please sign in or login.
+    {% endif %}        
+{% endblock %}
