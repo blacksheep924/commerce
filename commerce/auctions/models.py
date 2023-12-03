@@ -14,6 +14,7 @@ class Product(models.Model):
     productImage = models.URLField(default="https://cdn-icons-png.flaticon.com/512/7130/7130776.png")
     productOwner = models.ForeignKey(User, on_delete=models.CASCADE, related_name="owner", default = 1)
     
+
     def __str__(self):
         return f"{self.productName} || {self.productOwner} || {self.productImage}"
 
@@ -24,7 +25,7 @@ class Bid(models.Model):
     
     def __str__(self):
         
-        return f"{self.bidPrice} || {self.bidder}"
+        return f"{self.bidPrice} || {self.bidder} {self.product} "
 
 class Comments(models.Model):
     commentcontent = models.CharField(max_length=1000)

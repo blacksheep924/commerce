@@ -9,29 +9,21 @@ from .models import User, Product, Bid, Comments
 from django.db.models import Max
 
 def index(request):
+    
     products = Product.objects.all()
-    prices = Product.objects.filter(productprice__amount__gt=0)
+    bids = Bid.objects.all()
+    
     
     
 
+    
 
-    
-    
+        
+        
+
     
         
-    
-    
-        
-       
-   
-    
-    
-
-
-
-
-
-    return render(request, "auctions/index.html",{'products' : products, 'prices':prices})
+    return render(request, "auctions/index.html",{'products' : products})
 
 
 def login_view(request):
@@ -131,6 +123,8 @@ def productdetail(request, product_name):
 
     productname = Product.objects.get(productName=product_name)
     username = productname.productOwner.username
+    user_product = User.objects.get(username = productname.productOwner.username)
+    id = user_product.id
     image = productname.productImage
     
     bids = Bid.objects.filter(product = productname)
@@ -147,37 +141,15 @@ def productdetail(request, product_name):
             return render(request, "auctions/productdetail.html", {'productname': name, 'username' : username, 'image' : image, 'price' : price, 'message': "Bid too low"})
         else:
             current_bid = new_bid
-
-            new_product = Product(
-                productOwner = request.user,
-                productName = productname,   
-                productImage = image
-
+ 
+            existing_product = Product.objects.get(productName=name, productOwner=id, productImage=image)
+            make_bid = Bid(
+                bidPrice=current_bid,
+                bidder=request.user,
+                product=existing_product
             )
+            make_bid.save()
             
-            
-            try:
-                existing_product = Product.objects.get(productName=name, productOwner=request.user, productImage=image)
-                make_bid = Bid(
-                    bidPrice=current_bid,
-                    bidder=request.user,
-                    product=existing_product
-                )
-                make_bid.save()
-            except Product.DoesNotExist:
-                new_product = Product(
-                    productName=name,
-                    productOwner=request.user,
-                    productImage=image
-                )
-                new_product.save()
-
-                make_bid = Bid(
-                    bidPrice=current_bid,
-                    bidder=request.user,
-                    product=new_product
-                )
-                make_bid.save()
 
             return  redirect('index')
              
