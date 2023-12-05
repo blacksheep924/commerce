@@ -2,38 +2,74 @@
 
 {% block body %}
 {% if user.is_authenticated %}
+{% block title %}{{product_name.capitalize}}{% endblock %}
+
+
 
 <div>
     <h2>
-        Product name : {{ productname.capitalize }}
+       <p> Product name : {{ productname.capitalize }}</p>
+       {%for object in winner%}
+       {% if user.username|stringformat:"s" == object.productWinner|stringformat:"s"  %}
+        <p style="background-color: green; text-align: center;">You have won this auction</p>
+        {% endif %}
+        {%endfor%}
+            
+            
+            
+        
+            
 
     </h2>
+    <p> Category : {{category}}</p>
 </div>
 <div>
-    Product Image : <img src="{{ image }}" alt="Product Image">
+    <img src="{{ image }}" alt="Product Image">
 </div>
 
 <div>
-    Vendor : <strong>{{ username }}</strong>
+    <p>Vendor : <strong>{{ username }}</strong></p>
 </div>
 <div>
-    Current bid : {{price}} CHF
+    <p>Current bid : {{price}} CHF</p>
 </div>
 <div>
-    <form method="POST" action="{%url 'product_name' product_name=productname %}">
-    
-        {% csrf_token %}
-        
-        <input type="number" name="newbid" placeholder="{{price}} CHF">
-        
-        <input type="submit"   value="Bid" >
-        <div style="background-color: red;">{{message}}</div>
+</div>
+<div>
+    <form method="POST" action="{%url 'product_name' product_name=productname %}">{% csrf_token %}
+        <input type="hidden" name="placebid" value="placebid">
+       <p><input type="number" name="newbid" placeholder="{{price}} CHF" required>
+         <input type="submit"   value="Bid" ></p>
+        <p style="background-color: red; text-align: center;">{{message}}</p>
     </form>
 </div>
     {% if user.username == username%}
-<input type="submit" value="Close auction">
+    <form method="POST" action="{%url 'product_name' product_name=productname %}">{% csrf_token %}
+        <input type="hidden" name="close_auction" value="close_auction">
+        <p>Highest bidder : <strong>{{bidder.last.bidder}}   </strong>
+            <input type="submit" value="Close auction"></p>
+            <input type="hidden" name="Winner" value="{{bidder.last.bidder}}">
     {% endif %}
-
+    </form>
+<div>
+    <p>
+        <form method="POST" action="{%url 'product_name' product_name=productname %}" >{% csrf_token %}
+            <input type="hidden" name="comments" value="comments">
+            <textarea name="commentcontent" placeholder="Enter a comment for the product" required></textarea>
+            <input type="submit" value="Send comment">
+        </form>
+    </p>
+    {% for comment in comments %}
+    <p>------------------------------------------------------</p>
+    <p>
+        Comment from : <strong>{{comment.commentator}}</strong>
+    </p>
+    <p>
+        {{comment.commentcontent}}
+    </p>
+    
+    {% endfor %}
+</div>
 {% else %}
     Please sign in or login.
 {% endif %}

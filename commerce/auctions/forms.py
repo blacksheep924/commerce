@@ -5,3 +5,4 @@ class Newitem(forms.Form):
     startbid = forms.FloatField(label='Start bid')
     image = forms.URLField(label='Image URL')
     description = forms.CharField(widget=forms.Textarea)
+    category = forms.CharField(label='Category', max_length=128)
