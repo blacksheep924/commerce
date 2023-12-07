@@ -11,7 +11,7 @@
        <p> Product name : {{ productname.capitalize }}</p>
        {%for object in winner%}
        {% if user.username|stringformat:"s" == object.productWinner|stringformat:"s"  %}
-        <p style="background-color: green; text-align: center;">You have won this auction</p>
+        <p style="background-color: green; text-align: center;border-radius: 30px;">You have won this auction</p>
         {% endif %}
         {%endfor%}
             
@@ -24,18 +24,20 @@
     <p> Category : {{category}}</p>
 </div>
 <div>
-    <img src="{{ image }}" alt="Product Image">
+    <img style="border-radius: 30px;max-width: 100%;height: auto;" src="{{ image }}" alt="Product Image">
 </div>
 
 <div>
     <p>Vendor : <strong>{{ username }}</strong></p>
 </div>
+    
 <div>
     <p>Current bid : {{price}} CHF</p>
 </div>
 <div>
 </div>
 <div>
+
     <form method="POST" action="{%url 'product_name' product_name=productname %}">{% csrf_token %}
         <input type="hidden" name="placebid" value="placebid">
        <p><input type="number" name="newbid" placeholder="{{price}} CHF" required>
@@ -59,7 +61,7 @@
             <input type="submit" value="Send comment">
         </form>
     </p>
-    {% for comment in comments %}
+        {% for comment in comments %}
     <p>------------------------------------------------------</p>
     <p>
         Comment from : <strong>{{comment.commentator}}</strong>
@@ -68,7 +70,8 @@
         {{comment.commentcontent}}
     </p>
     
-    {% endfor %}
+        {% endfor %}
+    
 </div>
 {% else %}
     Please sign in or login.

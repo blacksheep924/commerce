@@ -210,14 +210,35 @@ def productdetail(request, product_name):
 @login_required
 def watchlist(request):
     username = request.user
+    
     if request.method == "POST":
-        if 'watchlistProduct' in request.POST:
-            productname = request.POST.get('watchlistProduct')
-            watchlist_check = request.POST.get('tickbox')
-            if watchlist_check is True or watchlist_check is None:
-                watchlist_check = True
-            elif watchlist_check is False:
-                watchlist_check = False
+        if 'tickbox1' in request.POST:
+            productname = request.POST.get('watchlistProduct1')
+            watchlist_check = request.POST.get('tickbox1')
+            
+
+            watchlist_user = username
+            save_product = Product.objects.get(productName=productname)
+            save_username = User.objects.get(username = watchlist_user)
+            make_watchlist = Watchlist(
+                watchlistUser = save_username,
+                watchlistProduct = save_product,
+                watchlistShow = watchlist_check
+            )
+            existing_watchlist = Watchlist.objects.filter(watchlistProduct = save_product, watchlistUser = save_username)
+            if existing_watchlist:
+                existing_watchlist = Watchlist.objects.get(watchlistProduct = save_product, watchlistUser = save_username)
+                existing_watchlist.watchlistShow = watchlist_check
+                existing_watchlist.save()
+            else:
+                make_watchlist.save()
+
+            return redirect('index')
+        
+        elif 'tickbox2' in request.POST:
+            productname = request.POST.get('watchlistProduct2')
+            watchlist_check = request.POST.get('tickbox2')
+
             watchlist_user = username
             save_product = Product.objects.get(productName=productname)
             save_username = User.objects.get(username = watchlist_user)

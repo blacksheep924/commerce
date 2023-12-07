@@ -15,7 +15,7 @@
         <li>
             <h3><a href="{% url 'product_name' entry.productName|urlize %}">{{entry.productName.capitalize}} </a></h3>
             <div>
-                <img src="{{entry.productImage}}" alt="image of the product">
+                <img style="border-radius: 30px;max-width: 100%;height: auto;" src="{{entry.productImage}}" alt="image of the product">
             </div>
             <div>
                 
@@ -25,49 +25,35 @@
                 <p style="color: green;">{% if entry.productprice.all.last.bidder == username%} You are the bidder with the highest bid {% endif %}</p>
                 <p> Owner : <strong>{{ entry.productOwner}}</strong></p>
                 <p>Category : {{ entry.productCategory.capitalize }}</p>
-                <form action="{% url 'watchlist' %}" method="POST">{% csrf_token %}
+                    <form action="{% url 'watchlist' %}" method="POST">{% csrf_token %}
+                    
                 <p> 
-                {% for watchlist_entry in entry.watchlistProduct.all %}
-                    {% if watchlist_entry.watchlistUser == request.user or watchlist_entry.watchlistUser == none %}
-                        {% if watchlist_entry.watchlistShow == True or watchlist_entry.watchlistShow == none %}
-
-                    
-
-                    <input type="checkbox" name="tickbox" value="False"required> <input type="submit" value="Add to watchlist">
-                    <input type="hidden" name="watchlistProduct" value="{{ entry.productName }}">
-                        {% elif watchlist_entry.watchlistShow == False or  watchlist_entry.watchlistShow == none %}
-
-                    <input type="checkbox" name="tickbox" value="True"required> <input type="submit" value="Remove from watchlist" >
-                    <input type="hidden" name="watchlistProduct" value="{{ entry.productName }}">
-                                           
-                    
-                        {% endif %}                  
-                    {% endif %} 
-                {% endfor %}
-                {% if entry.watchlistProduct.all.0.watchlistShow == None %}
-                    <input type="checkbox" name="tickbox" value="False"required> <input type="submit" value="Add to watchlist">
-                    <input type="hidden" name="watchlistProduct" value="{{ entry.productName }}">
-                {% else %}
-
-                {% endif %}
-                    
-                    
-                    
-                    
-
+                    <input type="hidden" name="tickbox1" value="True"  > <input style="background-color: rgb(195, 147, 204);border-radius: 10px;" type="submit" value="Add to watchlist">
+                    <input type="hidden" name="watchlistProduct1" value="{{ entry.productName }}">
                 </p>
-                </form>
+                    </form>
+                <p>
+                    <form action="{% url 'watchlist' %}" method="POST">{% csrf_token %}
+                    
+                    <input type="hidden" name="tickbox2" value="False"  > <input style="background-color: rgb(195, 147, 204);border-radius: 10px" type="submit" value="Remove from watchlist" >
+                    <input type="hidden" name="watchlistProduct2" value="{{ entry.productName }}">
+                    
+                    </form>
+                </p>
+                
                 
  
         </div>
-            </div>
-            <div>
+        </div>
+        <div style="background-color: rgb(195, 147, 204); width: 100%; text-align: center;border-radius: 20px;height: auto;font-size: 2vh; border: solid rgb(151, 114, 158) 2px">
                 Description : {{entry.comments.all.0.commentcontent}}
-            </div>
+        </div>
             
         </li>
         {% endif %}
+        
     {%endfor%}
+    
         
                 
         
